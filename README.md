@@ -28,25 +28,25 @@ This is a classical image-processing exercise. The programs produce edge images;
 
 ## Results at a glance
 
-The images below are the files committed in [`coin-detection-opencv/results/`](coin-detection-opencv/results/) and [`submitted/`](coin-detection-opencv/submitted/). The script's JPGs were reproduced exactly by a fresh run (see [Sample results](#sample-results)).
+The images below are the files committed in [`results/`](results/) and [`submitted/`](submitted/). The script's JPGs were reproduced exactly by a fresh run (see [Sample results](#sample-results)).
 
 **Script: original → edges → edges overlaid on the original** (the three selected coins, ₱20 + ₱1 + 10 centavos)
 
-![The three selected coins, joined side by side](coin-detection-opencv/results/script/output_01_original_combined.jpg)
+![The three selected coins, joined side by side](results/script/output_01_original_combined.jpg)
 
-![Canny edges after 3x3 morphological closing](coin-detection-opencv/results/script/output_07_morph_closed.jpg)
+![Canny edges after 3x3 morphological closing](results/script/output_07_morph_closed.jpg)
 
-![Edges drawn in green over the original coins](coin-detection-opencv/results/script/output_09_final_overlay.jpg)
+![Edges drawn in green over the original coins](results/script/output_09_final_overlay.jpg)
 
 **Notebook: five convolution kernels compared** (left to right: blurred input, sharpening, Sobel X, Sobel Y, Prewitt X, Prewitt Y)
 
-![Kernel comparison for the three coins](coin-detection-opencv/results/notebook/output_05_convolution.png)
+![Kernel comparison for the three coins](results/notebook/output_05_convolution.png)
 
 **Notebook: raw Canny edges (top) vs. after 5×5 closing (bottom).** The 5×5 closing joins the rims and numerals but also merges dense areas, such as the ₱20 portrait, into thick white regions. The submitted notebook used 3×3 instead:
 
-![Raw Canny edges above, closed edges below](coin-detection-opencv/results/notebook/output_07_cleaned_edges.png)
+![Raw Canny edges above, closed edges below](results/notebook/output_07_cleaned_edges.png)
 
-![Final edge output as submitted (3x3 closing)](coin-detection-opencv/submitted/lab1-submitted-edge-output.png)
+![Final edge output as submitted (3x3 closing)](submitted/lab1-submitted-edge-output.png)
 
 ## Table of contents
 
@@ -65,12 +65,11 @@ The images below are the files committed in [`coin-detection-opencv/results/`](c
 - Python 3.12 or newer (tested on 3.12.14 and 3.14.8, Linux)
 - `opencv-python-headless`, `numpy`, `matplotlib`, `scipy` (scipy is used by the notebooks only), and `jupyter` for the notebooks
 - No display is needed. The script never opens a window, and the notebooks draw with Matplotlib, which also works headless with `MPLBACKEND=Agg`
-- All inputs are in the repository ([`coin-detection-opencv/coins-dataset/`](coin-detection-opencv/coins-dataset/))
+- All inputs are in the repository ([`coins-dataset/`](coins-dataset/))
 
 **Setup and run**
 
 ```bash
-cd coin-detection-opencv
 python3 -m venv .venv && source .venv/bin/activate
 pip install opencv-python-headless numpy matplotlib scipy jupyter
 
@@ -85,7 +84,7 @@ jupyter lab coin-detection-submitted.ipynb
 MPLBACKEND=Agg jupyter nbconvert --to notebook --execute coin-detection.ipynb --output-dir "$(mktemp -d)"
 ```
 
-Run everything **from `coin-detection-opencv/`**: all paths (`coins-dataset/`, `output/`) are relative to the working directory, and the notebooks open with their own folder as the working directory, so they must stay next to `coins-dataset/`.
+Run everything **from the repository root**: all paths (`coins-dataset/`, `output/`) are relative to the working directory, and the notebooks open with their own folder as the working directory, so they must stay next to `coins-dataset/`.
 
 Where files are written:
 
@@ -100,20 +99,19 @@ These locations are git-ignored. The images kept in the repository are in `resul
 ## Repository structure
 
 ```text
-csec5-projects/
+coin-detection-opencv/
 ├── README.md
 ├── .gitignore
-└── coin-detection-opencv/
-    ├── coin-detection-pipeline.py          # script version (combined image)
-    ├── coin-detection.ipynb                # working notebook (per-coin, kernel comparison)
-    ├── coin-detection-submitted.ipynb      # notebook as submitted
-    ├── coins-dataset/                      # 9 coin photos (supplied for the activity)
-    ├── docs/
-    │   └── week1-lab1-instructions.md      # the activity brief
-    ├── results/
-    │   ├── script/                         # 9 JPGs produced by the script
-    │   └── notebook/                       # 8 PNGs produced by the working notebook
-    └── submitted/                          # the two result images as submitted
+├── coin-detection-pipeline.py          # script version (combined image)
+├── coin-detection.ipynb                # working notebook (per-coin, kernel comparison)
+├── coin-detection-submitted.ipynb      # notebook as submitted
+├── coins-dataset/                      # 9 coin photos (supplied for the activity)
+├── docs/
+│   └── week1-lab1-instructions.md      # the activity brief
+├── results/
+│   ├── script/                         # 9 JPGs produced by the script
+│   └── notebook/                       # 8 PNGs produced by the working notebook
+└── submitted/                          # the two result images as submitted
 ```
 
 ## Programs
@@ -124,14 +122,14 @@ Dates are **file last-modified dates** (YYYY-MM-DD) taken from the files on disk
 
 | File | What it does | Concept practiced | Last modified |
 |---|---|---|---|
-| [`coin-detection-pipeline.py`](coin-detection-opencv/coin-detection-pipeline.py) | Loads the ₱20, ₱1 and 10-centavo photos, resizes them to 500 px height, joins them side by side, runs the full pipeline on the joined image, and saves nine numbered images | End-to-end spatial filtering and edge detection; contours; overlaying edges on the original | 2026-08-16 |
+| [`coin-detection-pipeline.py`](coin-detection-pipeline.py) | Loads the ₱20, ₱1 and 10-centavo photos, resizes them to 500 px height, joins them side by side, runs the full pipeline on the joined image, and saves nine numbered images | End-to-end spatial filtering and edge detection; contours; overlaying edges on the original | 2026-08-16 |
 
 ### Notebooks
 
 | File | What it does | Concept practiced | Last modified |
 |---|---|---|---|
-| [`coin-detection.ipynb`](coin-detection-opencv/coin-detection.ipynb) | Loads all nine photos, selects the three for ₱21.10, runs the pipeline **per coin**, compares five convolution kernels (sharpening, Sobel X/Y, Prewitt X/Y), uses a 5×5 closing, and saves nine PNG figures | Convolution kernels and their effect; parameter choice; visual comparison of stages | — ¹ |
-| [`coin-detection-submitted.ipynb`](coin-detection-opencv/coin-detection-submitted.ipynb) | The version handed in. Same code except a 3×3 closing and figures saved to the current folder instead of `output/` | Same as above | — ² |
+| [`coin-detection.ipynb`](coin-detection.ipynb) | Loads all nine photos, selects the three for ₱21.10, runs the pipeline **per coin**, compares five convolution kernels (sharpening, Sobel X/Y, Prewitt X/Y), uses a 5×5 closing, and saves nine PNG figures | Convolution kernels and their effect; parameter choice; visual comparison of stages | — ¹ |
+| [`coin-detection-submitted.ipynb`](coin-detection-submitted.ipynb) | The version handed in. Same code except a 3×3 closing and figures saved to the current folder instead of `output/` | Same as above | — ² |
 
 ¹ ² The notebooks in this repository had their stored outputs cleared on 2026-10-19, which re-saved the files, so the date on disk (2026-10-19) is not their real date. The uncleared originals on the author's disk, whose cell contents are identical to these, are dated 2026-08-16 (working notebook) and 2026-08-15 (submitted notebook). Those are the dates of the originals, not of the files in this repository.
 
@@ -139,17 +137,17 @@ Dates are **file last-modified dates** (YYYY-MM-DD) taken from the files on disk
 
 | Path | Contents | Last modified |
 |---|---|---|
-| [`coins-dataset/`](coin-detection-opencv/coins-dataset/) | Nine coin photos (see [Dataset](#dataset)) | 2026-02-22 ³ |
-| [`docs/week1-lab1-instructions.md`](coin-detection-opencv/docs/week1-lab1-instructions.md) | The activity brief: objective, steps, expected output, submission requirements | 2026-08-15 |
-| [`results/script/`](coin-detection-opencv/results/script/) | Output of the script | 2026-08-16 |
-| [`results/notebook/`](coin-detection-opencv/results/notebook/) | Output of the working notebook | 2026-08-16 |
-| [`submitted/`](coin-detection-opencv/submitted/) | The two images as submitted | 2026-08-15 |
+| [`coins-dataset/`](coins-dataset/) | Nine coin photos (see [Dataset](#dataset)) | 2026-02-22 ³ |
+| [`docs/week1-lab1-instructions.md`](docs/week1-lab1-instructions.md) | The activity brief: objective, steps, expected output, submission requirements | 2026-08-15 |
+| [`results/script/`](results/script/) | Output of the script | 2026-08-16 |
+| [`results/notebook/`](results/notebook/) | Output of the working notebook | 2026-08-16 |
+| [`submitted/`](submitted/) | The two images as submitted | 2026-08-15 |
 
 ³ This is the date on the supplied photo files, not a creation date of the photos themselves.
 
 ## Dataset
 
-The coin photos were supplied for the activity ([instructions](coin-detection-opencv/docs/week1-lab1-instructions.md) say to use only this set). Image sizes are as stored.
+The coin photos were supplied for the activity ([instructions](docs/week1-lab1-instructions.md) say to use only this set). Image sizes are as stored.
 
 | File | Coin | Size (px) | Used |
 |---|---|---|---|
@@ -245,16 +243,16 @@ Saved final overlay
 Pipeline complete. Outputs saved to output/
 ```
 
-The nine images written are the ones in [`results/script/`](coin-detection-opencv/results/script/). Each stage, in order (1498×500 each):
+The nine images written are the ones in [`results/script/`](results/script/). Each stage, in order (1498×500 each):
 
 | Stage | Image |
 |---|---|
-| Grayscale | ![Grayscale](coin-detection-opencv/results/script/output_02_grayscale.jpg) |
-| Median 5×5, then Gaussian 7×7 (σ 1.5) | ![Gaussian blur](coin-detection-opencv/results/script/output_04_gaussian_blur.jpg) |
-| Sharpening convolution | ![Sharpened](coin-detection-opencv/results/script/output_05_sharpened.jpg) |
-| Canny (45, 120) | ![Canny edges](coin-detection-opencv/results/script/output_06_canny_edges.jpg) |
-| Closing, 3×3 ellipse, with external contours in green | ![Contours](coin-detection-opencv/results/script/output_08_final_contours.jpg) |
-| Edges over the original (edges recomputed without the sharpening step) | ![Overlay](coin-detection-opencv/results/script/output_09_final_overlay.jpg) |
+| Grayscale | ![Grayscale](results/script/output_02_grayscale.jpg) |
+| Median 5×5, then Gaussian 7×7 (σ 1.5) | ![Gaussian blur](results/script/output_04_gaussian_blur.jpg) |
+| Sharpening convolution | ![Sharpened](results/script/output_05_sharpened.jpg) |
+| Canny (45, 120) | ![Canny edges](results/script/output_06_canny_edges.jpg) |
+| Closing, 3×3 ellipse, with external contours in green | ![Contours](results/script/output_08_final_contours.jpg) |
+| Edges over the original (edges recomputed without the sharpening step) | ![Overlay](results/script/output_09_final_overlay.jpg) |
 
 </details>
 
@@ -371,23 +369,23 @@ Final edge output saved.
 Full pipeline summary saved.
 ```
 
-Nine figures are written to `output/`. The ones committed in [`results/notebook/`](coin-detection-opencv/results/notebook/) matched a fresh run on stack A pixel for pixel; on stack B the figures differed only by one pixel in canvas size because of Matplotlib's layout. Figures produced by the run, as committed:
+Nine figures are written to `output/`. The ones committed in [`results/notebook/`](results/notebook/) matched a fresh run on stack A pixel for pixel; on stack B the figures differed only by one pixel in canvas size because of Matplotlib's layout. Figures produced by the run, as committed:
 
 Pre-processing per coin (original, normalized, grayscale, median, Gaussian):
 
-![Pre-processing for each coin](coin-detection-opencv/results/notebook/output_04_preprocessing.png)
+![Pre-processing for each coin](results/notebook/output_04_preprocessing.png)
 
 Kernel comparison:
 
-![Kernel comparison](coin-detection-opencv/results/notebook/output_05_convolution.png)
+![Kernel comparison](results/notebook/output_05_convolution.png)
 
 Raw Canny edges (top) and after 5×5 closing (bottom):
 
-![Raw and closed edges](coin-detection-opencv/results/notebook/output_07_cleaned_edges.png)
+![Raw and closed edges](results/notebook/output_07_cleaned_edges.png)
 
 Final combined edge output (5×5 closing):
 
-![Final edge-detected output for the three coins](coin-detection-opencv/results/notebook/output_08_final_edge_output.png)
+![Final edge-detected output for the three coins](results/notebook/output_08_final_edge_output.png)
 
 </details>
 
@@ -410,8 +408,8 @@ Shape: ELLIPSE (best for circular coin outlines)
   P0.10: edge pixels 14982 -> 15838 (delta: +856)
 ```
 
-The submitted images are [`submitted/lab1-submitted-original-combined.png`](coin-detection-opencv/submitted/lab1-submitted-original-combined.png) and [`submitted/lab1-submitted-edge-output.png`](coin-detection-opencv/submitted/lab1-submitted-edge-output.png):
+The submitted images are [`submitted/lab1-submitted-original-combined.png`](submitted/lab1-submitted-original-combined.png) and [`submitted/lab1-submitted-edge-output.png`](submitted/lab1-submitted-edge-output.png):
 
-![Submitted edge-detected output](coin-detection-opencv/submitted/lab1-submitted-edge-output.png)
+![Submitted edge-detected output](submitted/lab1-submitted-edge-output.png)
 
 </details>

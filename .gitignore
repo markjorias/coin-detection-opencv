@@ -10,8 +10,8 @@ env/
 # Output written when the programs run in place
 # (coin-detection.ipynb and coin-detection-pipeline.py write to output/;
 #  coin-detection-submitted.ipynb writes output_*.png next to itself)
-coin-detection-opencv/output/
-coin-detection-opencv/output_*.png
+/output/
+/output_*.png
 
 # IDE / editor
 .vscode/
